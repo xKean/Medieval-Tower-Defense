@@ -9,11 +9,17 @@ using UnityEngine;
 
 public class CoordinateLabeler : MonoBehaviour
 {
+    [SerializeField] Color defaultColor = Color.black;
+    [SerializeField] Color blockedColor = Color.red;
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
+    Waypoint waypoint;
     void Awake()
     {
         label = GetComponent<TextMeshPro>();
+        label.enabled = false;
+
+        waypoint = GetComponentInParent<Waypoint>();
         DisplayCoordinates();
     }
     void Update()
@@ -22,6 +28,29 @@ public class CoordinateLabeler : MonoBehaviour
         {
             DisplayCoordinates();
             UpdateObjectName();
+        }
+
+        ColorCoordinates();
+        ToggleLabels();
+    }
+
+    void ToggleLabels()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            label.enabled = !label.IsActive();
+        }
+    }
+
+    void ColorCoordinates()
+    {
+        if (waypoint.IsPlacable)
+        {
+            label.color = defaultColor;
+        }
+        else
+        {
+            label.color = blockedColor;
         }
     }
 
